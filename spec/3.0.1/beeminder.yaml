@@ -33,6 +33,12 @@ paths:
           required: false
           description: Only get a subset of attributes and most recent datapoint. Must be used together with `diff_since`.
         - in: query
+          name: emaciated
+          schema:
+            type: boolean
+          required: false
+          description: If included the goal attributes called `road`, `roadall`, and `fullroad` will be stripped from any goal objects returned with the user.
+        - in: query
           name: datapoints_count
           schema:
             type: integer
@@ -335,6 +341,12 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateDatapointRequest'
       responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datapoint'
         201:
           description: Created
           content:
@@ -699,23 +711,10 @@ components:
         updated_at:
           type: integer
           example: 1660547396
-        burner:
-          type: string
-          enum:
-            - frontburner
-            - backburner
-          deprecated: true
         yaw:
           type: integer
           enum: [-1, +1]
           description: Good side of the bright red line.
-        lane:
-          deprecated: true
-          type: integer
-          description: See LoseDate and SafeBuf
-        lanewidth:
-          deprecated: true
-          type: number
         delta:
           type: number
           description: Distance from the bright red line to today's datapoint
@@ -751,10 +750,6 @@ components:
             pending_at:
               type: number
               nullable: true
-        delta_text:
-          type: string
-          example: +1 +2 +3
-          deprecated: true
         safebump:
           description: The absolute y-axis number you need to reach to get one additional day of safety buffer.
           example: 167.8
@@ -935,19 +930,9 @@ components:
             type: number
             nullable: false
           maxItems: 3
-        headsum:
-          deprecated: true
-          type: string
-          example: 'Red: bmndr.com/are/rapid is safe for ~0 days (beemergency!)'
-          description: Deprecated. Summary text blurb saying how much safety buffer you have.
         datapublic:
           type: boolean
           description: Whether you have to be logged in as the owner of the goal to view the datapoints
-        graphsum:
-          deprecated: true
-          type: string
-          description: Deprecated. Text summary of the graph, not used in the web UI anymore.
-          example: 167 on 2022.08.15 (126 datapoints in 153 days) targeting 3853 on 2032.09.16 (3685 more days) @ +1 / day
         rah:
           type: number
           description: Red line value (y-value of the bright red line) at the akrasia horizon (today plus one week).
