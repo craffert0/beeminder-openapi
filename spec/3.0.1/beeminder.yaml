@@ -953,10 +953,7 @@ components:
             type: object
             properties:
               id:
-                type: object
-                properties:
-                  $oid:
-                    type: string
+                type: string
               fulltext:
                 type: string
               canonical:
